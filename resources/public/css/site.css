@@ -37,3 +37,11 @@ h2 .title-link {
   font-size: .3em;
   font-weight: normal;
 }
+
+.todo-item.done {
+  color: #CCC;
+}
+
+.todo-item.done input[type="checkbox"] {
+  opacity: .4;
+}

@@ -16,3 +16,8 @@
 
 (defn add-todo-from-string [todo-string]
   (add-todos (conj [] {:done (boolean false) :text todo-string})))
+
+(defn update-todo [todo]
+  (go (let [response (<! (http/put (str apiUrl "/" (:id todo)) {:edn-params todo}))]
+        (if (not= (:body response) nil)
+          (data/update-todo (:body response))))))

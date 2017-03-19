@@ -28,10 +28,11 @@
      (include-js "/js/app.js")]))
 
 (defroutes routes
-  (GET "/" [] (loading-page))
-  (GET "/about" [] (loading-page))
-  (GET "/api/todos" [] (api/get-todos))
-  (POST "/api/todos" request (api/add-todos (:edn-params request)))
+  (GET  "/"               [] (loading-page))
+  (GET  "/about"          [] (loading-page))
+  (GET  "/api/todos"      [] (api/get-todos))
+  (POST "/api/todos"      request (api/add-todos (:edn-params request)))
+  (PUT  "/api/todos/:id"  request (api/update-todo (:edn-params request)))
   
   (resources "/")
   (not-found "Not Found"))

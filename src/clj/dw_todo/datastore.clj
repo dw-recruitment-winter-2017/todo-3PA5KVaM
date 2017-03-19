@@ -15,3 +15,8 @@
 
 (defn add-todos [todos]
   (mapv add-todo todos))
+
+(defn update-todo [todo]
+  (do
+    (swap! data update-in [:todos] assoc (:id todo) todo)
+    (get-in @data [:todos (:id todo)])))

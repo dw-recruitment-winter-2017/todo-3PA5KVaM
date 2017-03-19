@@ -3,9 +3,9 @@
             [dw-todo.datastore :as data]
             [dw-todo.client :as client]))
 
-;; local data handling
-
 (def input-text (atom ""))
+
+;; helper functions
 
 (defn reset-input-text []
   (reset! input-text ""))
@@ -16,13 +16,22 @@
       (client/add-todo-from-string @input-text)
       (reset-input-text))))
 
+(defn toggle-todo [todo]
+  (client/update-todo (assoc-in todo [:done] (not (:done todo)))))
+
 ;; TODO Components
+
+(defn todo-checkbox [todo]
+  [:input {:type "checkbox"
+           :checked (:done todo)
+           :on-change #(toggle-todo todo)}])
 
 (defn todo-input []
   [:input {:type "text"
            :placeholder "Do something"
            :value @input-text
-           :on-change #(reset! input-text (-> % .-target .-value))}])
+           :on-change #(reset! input-text (-> % .-target .-value))
+           :on-key-down #(if (= (.-which %) 13) (submit-input))}])
 
 (defn todo-form []
   [:div.todo-form
@@ -30,8 +39,8 @@
     [:button {:on-click #(submit-input)} "Add it!"]])
 
 (defn todo-item [todo]
-  [:div.todo-item
-    [:input {:type "checkbox" :checked (:done todo)}]
+  [:div.todo-item {:class (if (= (:done todo) true) "done")}
+    [todo-checkbox todo]
     [:span (:text todo)]])
 
 (defn todo-list []

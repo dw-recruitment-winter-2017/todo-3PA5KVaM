@@ -13,3 +13,9 @@
 (defn add-todos [params]
   (let [result (data/add-todos (:todos params))]
     (generate-response result)))
+
+(defn update-todo [todo]
+  (let [result (data/update-todo todo)]
+    (if (= result nil)
+    (generate-response nil 404)
+    (generate-response result))))
