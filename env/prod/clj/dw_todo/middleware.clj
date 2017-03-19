@@ -1,5 +1,8 @@
 (ns dw-todo.middleware
-  (:require [ring.middleware.defaults :refer [site-defaults wrap-defaults]]))
+  (:require [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
+            [ring.middleware.edn :refer [wrap-edn-params]]))
 
 (defn wrap-middleware [handler]
-  (wrap-defaults handler site-defaults))
+  (-> handler
+      (wrap-defaults site-defaults)
+      wrap-edn-params))

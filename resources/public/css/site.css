@@ -32,3 +32,8 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+h2 .title-link {
+  font-size: .3em;
+  font-weight: normal;
+}

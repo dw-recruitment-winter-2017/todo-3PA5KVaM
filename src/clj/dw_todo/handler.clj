@@ -1,19 +1,10 @@
 (ns dw-todo.handler
-  (:require [compojure.core :refer [GET defroutes]]
+  (:require [compojure.core :refer [GET PUT POST DELETE defroutes]]
             [compojure.route :refer [not-found resources]]
             [hiccup.page :refer [include-js include-css html5]]
             [dw-todo.middleware :refer [wrap-middleware]]
-            [config.core :refer [env]]))
-
-;; DATA
-
-(defonce data (atom {
-  :todos [
-    {:id 0 :done (boolean false) :text "Learn Clojure"}
-    {:id 1 :done (boolean false) :text "Build a Todo App"}]}))
-
-(defn get-todos []
-  (get-in @data [:todos]))
+            [config.core :refer [env]]
+            [dw-todo.api :as api]))
 
 (def mount-target
   [:div#app
@@ -36,20 +27,11 @@
      mount-target
      (include-js "/js/app.js")]))
 
-;; middleware to generate and send EDN response
-(defn generate-response [data & [status]]
-  {:status (or status 200)
-   :headers {"Content-Type" "application/edn"}
-   :body (pr-str data)})
-
-;; API
-(defn api-get-todos []
-  (generate-response (get-todos)))
-
 (defroutes routes
   (GET "/" [] (loading-page))
   (GET "/about" [] (loading-page))
-  (GET "/api/todos" [] (api-get-todos))
+  (GET "/api/todos" [] (api/get-todos))
+  (POST "/api/todos" request (api/add-todos (:edn-params request)))
   
   (resources "/")
   (not-found "Not Found"))
