@@ -5,6 +5,16 @@
             [dw-todo.middleware :refer [wrap-middleware]]
             [config.core :refer [env]]))
 
+;; DATA
+
+(defonce data (atom {
+  :todos [
+    {:id 0 :done (boolean false) :text "Learn Clojure"}
+    {:id 1 :done (boolean false) :text "Build a Todo App"}]}))
+
+(defn get-todos []
+  (get-in @data [:todos]))
+
 (def mount-target
   [:div#app
       [:h3 "ClojureScript has not been compiled!"]
@@ -26,10 +36,20 @@
      mount-target
      (include-js "/js/app.js")]))
 
+;; middleware to generate and send EDN response
+(defn generate-response [data & [status]]
+  {:status (or status 200)
+   :headers {"Content-Type" "application/edn"}
+   :body (pr-str data)})
+
+;; API
+(defn api-get-todos []
+  (generate-response (get-todos)))
 
 (defroutes routes
   (GET "/" [] (loading-page))
   (GET "/about" [] (loading-page))
+  (GET "/api/todos" [] (api-get-todos))
   
   (resources "/")
   (not-found "Not Found"))
