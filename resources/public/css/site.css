@@ -32,6 +32,8 @@ a:hover {
   text-decoration: underline;
 }
 
+/* TODO: Figure out how to use lein to generate and output SASS, so we don't have to do this */
+
 h2 .title-link {
   font-size: .3em;
   font-weight: normal;
