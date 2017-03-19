@@ -1,8 +1,7 @@
 .body-container {
   font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
   max-width: 600px;
-  margin: 0 auto;
-  padding-top: 72px;
+  margin: 4em auto;
   -webkit-font-smoothing: antialiased;
   font-size: 1.125em;
   color: #333;
@@ -38,10 +37,57 @@ h2 .title-link {
   font-weight: normal;
 }
 
+.todo-item {
+  cursor: pointer;
+  border-bottom: 1px solid #F6F6F6;
+}
+
+.todo-item:last-of-type {
+  border-bottom: none;
+}
+
+.todo-item .description {
+  display: inline-block;
+  width: calc(100% - 40px);
+}
+
+.todo-item .remove {
+  float: right;
+  color: #F93E3E;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.todo-item .remove:hover {
+  color: #A80000;
+}
+
 .todo-item.done {
   color: #CCC;
 }
 
-.todo-item.done input[type="checkbox"] {
+.todo-item input[type="checkbox"] {
+  vertical-align: top;
+  margin-top: 7px;
+}
+
+.todo-item.done input[type="checkbox"],
+.todo-item.done .remove {
   opacity: .4;
+}
+
+.todo-form {
+  margin-top: .5em;
+}
+
+.todo-form input {
+  margin-left: 1em;
+  font-size: 18px;
+  width: calc(100% - 105px);
+}
+
+.todo-form button {
+  float: right;
+  margin-top: 4px;
+  font-size: 14px;
 }

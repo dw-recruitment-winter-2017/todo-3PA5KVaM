@@ -17,13 +17,20 @@
       (reset-input-text))))
 
 (defn toggle-todo [todo]
-  (client/update-todo (assoc-in todo [:done] (not (:done todo)))))
+  ;; For displayed todos, toggling between 0 and 1 by subtracting 1 and multiplying by -1
+  (client/update-todo (assoc-in todo [:status] (-> (:status todo) (- 1) (* -1)))))
+
+(defn remove-todo [todo]
+  (client/remove-todo todo))
 
 ;; TODO Components
 
+(defn todo-remove [todo]
+  [:a {:class "remove" :on-click #(remove-todo todo)} "x"])
+
 (defn todo-checkbox [todo]
   [:input {:type "checkbox"
-           :checked (:done todo)
+           :checked (= (:status todo) 1)
            :on-change #(toggle-todo todo)}])
 
 (defn todo-input []
@@ -39,14 +46,16 @@
     [:button {:on-click #(submit-input)} "Add it!"]])
 
 (defn todo-item [todo]
-  [:div.todo-item {:class (if (= (:done todo) true) "done")}
+  [:div.todo-item {:class (if (= (:status todo) 1) "done")}
     [todo-checkbox todo]
-    [:span (:text todo)]])
+    [:div.description {:on-click #(toggle-todo todo)}(:text todo)]
+    [todo-remove todo]])
 
 (defn todo-list []
   [:div#todo-list
     (for [todo (data/get-todos)]
-      ^{:key (:id todo)}[todo-item todo])])
+      (if (< (:status todo) 2)
+        ^{:key (:id todo)} [todo-item todo]))])
 
 ;; Pages
 

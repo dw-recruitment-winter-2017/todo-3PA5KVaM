@@ -8,7 +8,7 @@
    :body (pr-str data)})
 
 (defn get-todos []
-  (generate-response (data/get-todos)))
+  (generate-response (data/get-active-todos)))
 
 (defn add-todos [params]
   (let [result (data/add-todos (:todos params))]
